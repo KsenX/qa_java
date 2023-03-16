@@ -38,9 +38,11 @@ public class LionTest extends TestCase {
 
     @Test
     public void testGetKittens() throws Exception {
-        Lion lion = new Lion(felineSpy, "Самка");
+        Lion lion = new Lion(felineSpy, sex);
         lion.getKittens();
-        Mockito.verify(felineSpy).getKittens();
+        // Mockito.verify(felineSpy).getKittens();
+        Mockito.when(feline.getKittens()).thenReturn(5);
+        assertEquals(5, lion.getKittens());
     }
 
     @Test
@@ -53,14 +55,23 @@ public class LionTest extends TestCase {
 
     @Test
     public void testGetFood() throws Exception {
-        Lion lion = new Lion(felineSpy, "Самка");
+        Lion lion = new Lion(felineSpy, sex);
         lion.getFood();
         Mockito.verify(felineSpy).getFood("Хищник");
     }
 
     @Test(expected = Exception.class)
     public void testIncorrectSexThrowsException() throws Exception {
-        Lion lion = new Lion(felineSpy, "ЭксепшенВыбросит");
+        try {
+            Lion lion = new Lion(felineSpy, "ЭксепшенВыбросит");
+        }
+        catch (Exception e) {
+            String expected= "Используйте допустимые значения пола животного - самец или самка";
+            assertEquals(expected,e.getMessage());
+            throw e;
+        }
+        fail("Incorrect exception");
+
 
     }
 }
